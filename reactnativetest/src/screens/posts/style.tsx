@@ -10,4 +10,10 @@ export const styles = StyleSheet.create({
         alignSelf:'center',
         marginTop:responsiveHeight(2)
     },
+    iconView:{
+        flexDirection:'row',
+        width:responsiveWidth(25),
+        justifyContent:'space-between',
+        marginTop:responsiveHeight(1),
+    }
 })
