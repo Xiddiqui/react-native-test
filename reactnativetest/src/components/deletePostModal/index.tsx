@@ -13,7 +13,7 @@ import {hidedeletemodal} from '../../redux/Actions'
 
 const DeleteModal = (props) => {
 useEffect(()=>{
-    console.log('@@',props.AllPosts.visible)
+    // console.log('@@',props.AllPosts.visible)
 },[])
     const dispatch = useDispatch()
     return (
@@ -32,13 +32,13 @@ useEffect(()=>{
                        <View style={styles.buttonRowView}>
                        <TouchableOpacity
                             style={[styles.button]}
-                            onPress={() => props.hidedeletemodal()}
+                            // onPress={() => props.hidedeletemodal()}
                         >
                             <Text style={styles.textStyle}>YES</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.button]}
-                            onPress={() =>  props.hidedeletemodal()}
+                            // onPress={() =>  props.hidedeletemodal()}
                         >
                             <Text style={styles.textStyle}>NO</Text>
                         </TouchableOpacity>

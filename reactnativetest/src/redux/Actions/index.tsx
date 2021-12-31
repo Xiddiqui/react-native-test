@@ -6,7 +6,11 @@ import {
     SHOW_DELETE_MODAL,
     HIDE_CREATE_POST_MODAL,
     SHOW_CREATE_POST_MODAL,
+    EXTRA,
+    EXTRA_FALSE,
 } from "../types";
+
+
 export const fetchingpostrequest = (payload) => {
     return {
         type: FETCHING_POSTS_REQUEST,
@@ -58,9 +62,23 @@ export const showdeletemodal = (payload) => {
     }
   }
   export const showcreatepostmodal = (postModalpayload) => {
-      console.log('show',postModalpayload)
+      console.log('\n\n show create',postModalpayload)
       return{
           type : SHOW_CREATE_POST_MODAL,
           postModalpayload:true,
       }
     }
+    export const extrastate = () => {
+        console.log('\n\n extra truem ====')
+        return{
+            type : EXTRA,
+            extrapayload:true,
+        }
+      } 
+      export const extrastatefalse = () => {
+        console.log('\n\n extra falseh=====')
+        return{
+            type : EXTRA_FALSE,
+            extrapayload:false,
+        }
+      }

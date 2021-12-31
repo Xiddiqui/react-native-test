@@ -9,15 +9,20 @@ import {
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import { connect, useDispatch } from 'react-redux'
 import { buttonColor } from "../../constants/colors";
-import { hidecreatepostmodal } from '../../redux/Actions'
+import { hidecreatepostmodal, extrastate } from '../../redux/Actions'
 import { TextInput } from 'react-native-paper';
 import Toast from 'react-native-simple-toast'
+import { useSelector } from "react-redux";
 
 const CreatePostModal = (props) => {
-    useEffect(() => {
-    }, [])
+
+    const modalstate = useSelector(state => state?.createPostModalReducer?.createpostModal);
+
+    
+// const [moadls,setmodals]=useState(modalstate?.createpostModal)
     const dispatch = useDispatch()
     const [text, setText] = useState('');
+    const [extra, setextra] = useState(true);
     const [discription, setDiscription] = useState('');
     const createPost = () => {
         fetch('https://jsonplaceholder.typicode.com/posts', {
@@ -33,64 +38,67 @@ const CreatePostModal = (props) => {
         })
             .then((response) => response.json())
             .then((json) => {
-                console.log(json)
-            Toast.show('Post Created')
+                // dispatch(extrastate())
+                console.log('\n\n\njson',json)
+                Toast.show('Post Created', Toast.LONG)
             });
     }
     return (
-        <View>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={props.AllPosts.createpostModal}
-                onRequestClose={() => {
-                    // dispatch(hidedeletemodal)
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Create Post</Text>
-                        <View>
-                            <TextInput
-                                label="Title"
-                                value={text}
-                                style={styles.txtInput}
-                                onChangeText={text => setText(text)}
-                            />
-                        </View>
-                        <View>
-                            <TextInput
-                                label="Discription"
-                                value={discription}
-                                style={styles.txtInput}
-                                onChangeText={text => setDiscription(text)}
-                            />
-                        </View>
-                        <View style={styles.buttonRowView}>
-                            <TouchableOpacity
-                                style={[styles.button]}
-                                onPress={() => {
-                                    createPost()
-                                    props.hidecreatepostmodal()
 
-                                }}
-                            >
-                                <Text style={styles.textStyle}>POST</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.button]}
-                                onPress={() => {
-                                    
-                                    props.hidecreatepostmodal()
-                                }}
-                            >
-                                <Text style={styles.textStyle}>CANCEL</Text>
-                            </TouchableOpacity>
-                        </View>
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalstate}
+            onRequestClose={() => {
+                dispatch(hidecreatepostmodal())
+            }}
+        >
+            <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Create Post</Text>
+                    <View>
+                        <TextInput
+                            label="Title"
+                            value={text}
+                            style={styles.txtInput}
+                            onChangeText={text => setText(text)}
+                        />
+                    </View>
+                    <View>
+                        <TextInput
+                            label="Discription"
+                            value={discription}
+                            style={styles.txtInput}
+                            onChangeText={text => setDiscription(text)}
+                        />
+                    </View>
+                    <View style={styles.buttonRowView}>
+                        <TouchableOpacity
+                            style={[styles.button]}
+                            onPress={() => {
+
+                                createPost()
+                                dispatch(hidecreatepostmodal())
+
+                            }}
+                        >
+                            <Text style={styles.textStyle}>POST</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.button]}
+                            onPress={() => {
+
+                                dispatch(hidecreatepostmodal())
+
+                            }}
+                        >
+                            <Text style={styles.textStyle}>CANCEL</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
-        </View>
+            </View>
+        </Modal>
+
     )
 }
 const styles = StyleSheet.create({
@@ -98,7 +106,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22
+        marginTop: 22,
+
+        backgroundColor: 'transparent'
     },
     modalView: {
         margin: 20,

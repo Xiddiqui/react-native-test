@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Text,
     View,
@@ -9,7 +9,7 @@ import {
 import { AppHeader } from '../../components/header'
 import { styles } from './style'
 import { fetchposts } from '../../redux/Actions'
-import {showdeletemodal , showcreatepostmodal} from '../../redux/Actions'
+import { showdeletemodal, showcreatepostmodal,extrastatefalse } from '../../redux/Actions'
 import { connect } from 'react-redux'
 import { Card, Title, Paragraph } from 'react-native-paper';
 import { AddPostButton } from '../../components/addButton'
@@ -22,57 +22,77 @@ import CreatePostModal from '../../components/createPostModal'
 
 const PostScreen = (props) => {
     useEffect(() => {
-        props.fetchposts()
+        dispatch(fetchposts())
         return () => {
-
         }
     }, [])
+
+
+    const fetchpost = useSelector(state => state?.postReducer?.postArr);
+    const extra = useSelector(state => state?.postReducer?.extra);
+
+console.log('\n]\n sttt',extra);
+
+
+
     const dispatch = useDispatch();
+
+    const [dummt, setdummt] = useState([
+        {
+            body: "dummy",
+            title: 'dumnmr tt',
+            id: 46567
+        }
+    ])
     return (
         <View style={styles.container}>
             <StatusBar translucent={true} backgroundColor={'transparent'} barStyle={'dark-content'} />
             <AppHeader text={'My App'} />
-            <View>
-                <AddPostButton onPress={()=>{
-                    props.showcreatepostmodal()
-                }}/>
-            </View>
-            <View>
-                <FlatList
-                    data={props.AllPosts.postArr}
-                    renderItem={({ item, index }) => (
-                        <View>
-                            <Card style={styles.card}>
-                                <Card.Content>
-                                    <Title>{item.title}</Title>
-                                    <Paragraph>{item.body}</Paragraph>
-                                    <View style={styles.iconView}>
-                                        <TouchableOpacity
-                                        onPress={()=>{
-                                           props.showdeletemodal()
+
+            <AddPostButton onPress={() => {
+  
+                dispatch(showcreatepostmodal())
+                // dispatch(extrastatefalse())
+            }} />
+
+
+            <FlatList
+                data={fetchpost}
+                extraData={extra}
+                renderItem={({ item, index }) => (
+                    <View>
+                        <Card style={styles.card}>
+                            <Card.Content>
+                                <Title>{item.title}</Title>
+                                <Paragraph>{item.body}</Paragraph>
+                                <View style={styles.iconView}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            dispatch(showdeletemodal())
                                         }}
-                                        >
-                                        <Icon name={'delete'} color={iconColor.primary} size={responsiveFontSize(4)}/>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity>
-                                        <Icon name={'file-edit-outline'} color={iconColor.primary} size={responsiveFontSize(4)}/>
-                                        </TouchableOpacity>
-                                    </View>
-                                </Card.Content>
-                            </Card>
-                        </View>
-                    )}
-                />
-            </View>
+                                    >
+                                        <Icon name={'delete'} color={iconColor.primary} size={responsiveFontSize(4)} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity>
+                                        <Icon name={'file-edit-outline'} color={iconColor.primary} size={responsiveFontSize(4)} />
+                                    </TouchableOpacity>
+                                </View>
+                            </Card.Content>
+                        </Card>
+                    </View>
+                )}
+            />
+
             {/* <DeleteModal/> */}
-            <CreatePostModal/>
+            <CreatePostModal />
         </View>
     )
 }
-const mapStateToProps = state => {
-    return {
-        AllPosts: state
-    };
-}
+// const mapStateToProps = state => {
+//     return {
+//         AllPosts: state
+//     };
+// }
 
-export default connect(mapStateToProps, { fetchposts,showcreatepostmodal})(PostScreen)
+// export default connect(mapStateToProps, { fetchposts,showcreatepostmodal})(PostScreen)
+export default PostScreen;
